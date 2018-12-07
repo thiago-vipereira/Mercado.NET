@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Mercado.NET.Web.Ui.Models.Produto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Preco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cadastro)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="#" data-toggle="popover" data-trigger="hover" id="@item.Id">@Html.DisplayFor(modelItem => item.Nome)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Preco)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cadastro)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var msg;
+        var pop = $('[data-toggle="popover"]').popover({
+            title: setData,
+            content: function () { 
+                var message = "ID do produto: " + msg.id;
+                return message;
+            }
+        });
+        function setData(id) {
+            var set_data = '';
+            var element = $(this);
+            var id = element[0].id;
+            $.ajax({
+                async: true,
+                url: "/Produtos/DetailsModal",
+                type: "POST",
+                data: { id: id },
+                success: function (data) {
+                    msg = data;
+                }
+
+            });
+            return set_data;
+        }
+    });
+</script>
